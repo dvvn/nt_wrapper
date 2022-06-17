@@ -45,3 +45,6 @@ compile_commands.json
 *.out
 *.app
 /.vs
+/build
+/.xmake/windows/x64
+/vsxmake2022

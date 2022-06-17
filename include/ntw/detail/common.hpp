@@ -15,7 +15,7 @@
  */
 
 #pragma once
-#define PHNT_VERSION PHNT_19H1
+#define PHNT_VERSION PHNT_WIN11
 #include "config.hpp"
 #include <phnt_windows.h>
 #include <phnt.h>
