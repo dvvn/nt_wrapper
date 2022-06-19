@@ -1,19 +1,21 @@
 add_rules("mode.debug", "mode.release")
-add_requires("catch2","phnt")
+add_requires("gtest","phnt")
 target("ntw")
     set_kind("headeronly")
+    set_languages("c++20")
     add_includedirs("include")
     add_headerfiles("include/**.hpp","include/**.inl")
 
 
 
 target("test")
+    set_symbols("debug")
     set_kind("binary")
     set_languages("c++20")
     add_includedirs("include")
     add_files("test/*.cpp")
     add_deps("ntw")
-    add_packages("catch2","phnt")
+    add_packages("gtest","phnt")
 
 --
 -- If you want to known more usage about xmake, please see https://xmake.io

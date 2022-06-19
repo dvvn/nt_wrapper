@@ -38,6 +38,16 @@ namespace ntw::sys {
         KWAIT_REASON   wait_reason;
     };
 
+    struct extended_thread {
+        thread    thread_info;
+        void*     stack_base;
+        void*     stack_limit;
+        void*     win32_start_address;
+        void*     teb_base;
+        uintptr_t reserved2;
+        uintptr_t reserved3;
+        uintptr_t reserved4;
+    };
     /// \brief A wrapper around SYSTEM_PROCESS_INFORMATION class
     struct process {
         std::uint32_t  offset_to_next;
@@ -91,6 +101,12 @@ namespace ntw::sys {
         /// \brief Returns a span of this process thread information
         NTW_INLINE std::span<const thread> threads() const noexcept;
 
+        /// \brief Returns a span of this process extended thread information
+        NTW_INLINE std::span<extended_thread> extended_threads() noexcept;
+
+        /// \brief Returns a span of this process extended thread information
+        NTW_INLINE std::span<const extended_thread> extended_threads() const noexcept;
+
         using range_type = detail::offset_iterator_range<process, true>;
     };
 
@@ -100,6 +116,14 @@ namespace ntw::sys {
     /// \param returned The amount of bytes used inside the buffer.
     template<class Range>
     NTW_INLINE ntw::result<process::range_type> processes(Range&&  buffer,
+                                                          ulong_t* returned = nullptr);
+
+     /// \brief Acquires a list of processes using NtQuerySystemInformation with
+    ///        SystemExtendedProcessInformation class.
+    /// \param buffer Buffer into which process information will be read into.
+    /// \param returned The amount of bytes used inside the buffer.
+    template<class Range>
+    NTW_INLINE ntw::result<process::range_type> processes_ex(Range&&  buffer,
                                                           ulong_t* returned = nullptr);
 
 } // namespace ntw::sys

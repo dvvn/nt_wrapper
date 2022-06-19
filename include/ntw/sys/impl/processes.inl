@@ -34,6 +34,18 @@ namespace ntw::sys {
         return { status, { reinterpret_cast<process*>(first) } };
     }
 
+    template<class Range>
+    NTW_INLINE ntw::result<process::range_type> processes_ex(Range&&  buffer,
+                                                          ulong_t* returned)
+    {
+        const auto  first  = detail::unfancy(detail::adl_begin(buffer));
+        const auto  size   = static_cast<ulong_t>(detail::range_byte_size(buffer));
+        ntw::status status = NTW_SYSCALL(NtQuerySystemInformation)(
+            SystemExtendedProcessInformation, first, size, returned);
+
+        return { status, { reinterpret_cast<process*>(first) } };
+    }
+
     NTW_INLINE std::span<thread> process::threads() noexcept
     {
         return { reinterpret_cast<thread*>(this + 1), thread_count };
@@ -42,6 +54,17 @@ namespace ntw::sys {
     NTW_INLINE std::span<const thread> process::threads() const noexcept
     {
         return { reinterpret_cast<const thread*>(this + 1), thread_count };
+    }
+        /// \brief Returns a span of this process extended thread information
+    NTW_INLINE std::span<extended_thread> process::extended_threads() noexcept
+    {
+        return { reinterpret_cast<extended_thread*>(this + 1), thread_count };
+    }
+
+    /// \brief Returns a span of this process extended thread information
+    NTW_INLINE std::span<const extended_thread> process::extended_threads() const noexcept
+    {
+        return { reinterpret_cast<const extended_thread*>(this + 1), thread_count };
     }
 
 } // namespace ntw::sys
