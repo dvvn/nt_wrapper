@@ -55,7 +55,7 @@ namespace ntw {
         return &_value;
     }
 
-    template<class T>
+ /*   template<class T>
     template<class Fn>
     NTW_INLINE constexpr auto ntw::result<T>::then(Fn fn)
         -> ntw::result<decltype(fn(**this))>
@@ -63,7 +63,7 @@ namespace ntw {
         if(*this)
             return { status(), fn(**this) };
         return { status() };
-    }
+    }*/
 
     template<class T>
     NTW_INLINE constexpr status& ntw::result_ref<T>::status() noexcept

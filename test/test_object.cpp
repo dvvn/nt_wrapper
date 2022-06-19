@@ -1,6 +1,5 @@
 #include <ntw/ob/object.hpp>
 #include <ntw/ob/object_info.hpp>
-#define CATCH_CONFIG_MAIN
 #define WIN32_NO_STATUS
 #include <catch2/catch.hpp>
 

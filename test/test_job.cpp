@@ -1,6 +1,5 @@
 #include <ntw/ob/job.hpp>
 #include <ntw/ob/job_info.hpp>
-#define CATCH_CONFIG_MAIN
 #define WIN32_NO_STATUS
 #include <catch2/catch.hpp>
 

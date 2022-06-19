@@ -149,14 +149,14 @@ namespace ntw::ob {
     template<class T>
     thread_builder<T>& thread_builder<T>::has_security_desc()
     {
-        _flags |= THREAD_CREATE_FLAGS_HAS_SECURITY_DESCRIPTOR;
+        _flags |= THREAD_CREATE_FLAGS_LOADER_WORKER;
         return *this;
     }
 
     template<class T>
     thread_builder<T>& thread_builder<T>::access_check_in_target()
     {
-        _flags |= THREAD_CREATE_FLAGS_ACCESS_CHECK_IN_TARGET;
+        _flags |= THREAD_CREATE_FLAGS_SKIP_LOADER_INIT;
         return *this;
     }
 
@@ -252,10 +252,11 @@ namespace ntw::ob {
         ThreadIdType tid, thread_access access, const attributes& attr) noexcept
     {
         CLIENT_ID         cid{ nullptr, tid };
-        OBJECT_ATTRIBUTES attr = attr.get();
+        OBJECT_ATTRIBUTES ob_attr = attr.get();
 
         void*      handle = nullptr;
-        const auto status = NTW_SYSCALL(NtOpenThread)(&handle, access.get(), &attr, &cid);
+        const auto status =
+            NTW_SYSCALL(NtOpenThread)(&handle, access.get(), &ob_attr, &cid);
 
         return { status, handle };
     }
@@ -370,7 +371,7 @@ namespace ntw::ob {
         const Process& process, thread_access access, attribute_options opt) noexcept
     {
         void*      handle;
-        const auto status = NTW_SYSCALL(NtGetNextThread)(::ntw::details::unwrap(process),
+        const auto status = NTW_SYSCALL(NtGetNextThread)(::ntw::detail::unwrap(process),
                                                          nullptr,
                                                          access.get(),
                                                          opt.get(),
@@ -397,7 +398,7 @@ namespace ntw::ob {
                           attribute_options opt) const noexcept
     {
         void*      handle;
-        const auto status = NTW_SYSCALL(NtGetNextThread)(::ntw::details::unwrap(process),
+        const auto status = NTW_SYSCALL(NtGetNextThread)(::ntw::detail::unwrap(process),
                                                          this->get(),
                                                          access.get(),
                                                          opt.get(),
