@@ -17,6 +17,7 @@
 #pragma once
 #include "../process.hpp"
 #include "../../detail/unwrap.hpp"
+#include "../../sys/version.hpp"
 
 namespace ntw::ob {
 
@@ -103,10 +104,37 @@ namespace ntw::ob {
         _access |= PROCESS_SET_LIMITED_INFORMATION;
         return *this;
     }
-
-    NTW_INLINE constexpr process_access& process_access::all()
+    NTW_INLINE process_access& process_access::set_access() noexcept
     {
-        _access = PROCESS_ALL_ACCESS;
+        if(ntw::sys::sys_ver_from_peb()->to_ver_enum() >=
+           ntw::sys::ver_enum::windows_vista) {
+            _access |= PROCESS_SET_LIMITED_INFORMATION;
+        }
+        else {
+            _access |= PROCESS_SET_INFORMATION;
+        }
+        return *this;
+    }
+    NTW_INLINE process_access& process_access::query_access() noexcept
+    {
+        if(ntw::sys::sys_ver_from_peb()->to_ver_enum() >=
+           ntw::sys::ver_enum::windows_vista) {
+            _access |= PROCESS_QUERY_LIMITED_INFORMATION;
+        }
+        else {
+            _access |= PROCESS_QUERY_INFORMATION;
+        }
+        return *this;
+    }
+    NTW_INLINE process_access& process_access::all() noexcept
+    {
+        if (ntw::sys::sys_ver_from_peb()->to_ver_enum() >=
+            ntw::sys::ver_enum::windows_vista) {
+            _access = STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x1fff;
+        }
+        else {
+            _access = STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0xfff;
+        }
         return *this;
     }
 

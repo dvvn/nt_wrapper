@@ -58,8 +58,15 @@ namespace ntw::ob {
         /// \brief Enables THREAD_RESUME flag
         NTW_INLINE constexpr thread_access& resume();
 
+        /// \brief Enables THREAD_SET_INFORMATION or THREAD_SET_LIMITED_INFORMATION
+        /// flag
+        NTW_INLINE thread_access& thread_access::set_access() noexcept;
+
+        /// \brief Enables THREAD_QUERY_INFORMATION or THREAD_QUERY_LIMITED_INFORMATION flag
+        NTW_INLINE thread_access& thread_access::query_access() noexcept;
+
         /// \brief Enables THREAD_ALL_ACCESS flag
-        NTW_INLINE constexpr thread_access& all() noexcept;
+        NTW_INLINE thread_access& all() noexcept;
     };
 
     template<class Thread>

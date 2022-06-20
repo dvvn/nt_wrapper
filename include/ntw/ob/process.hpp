@@ -67,8 +67,14 @@ namespace ntw::ob {
         /// \brief Enables PROCESS_SET_LIMITED_INFORMATION flag
         NTW_INLINE constexpr process_access& set_limited_info();
 
+        /// \brief Enables PROCESS_SET_LIMITED_INFORMATION or PROCESS_SET_INFORMATION
+        /// flag
+        NTW_INLINE process_access& set_access() noexcept;
+        /// \brief Enables PROCESS_QUERY_LIMITED_INFORMATION or PROCESS_QUERY_INFORMATION
+        /// flag
+        NTW_INLINE process_access& query_access() noexcept;
         /// \brief Enables PROCESS_ALL_ACCESS flag
-        NTW_INLINE constexpr process_access& all();
+        NTW_INLINE process_access& all() noexcept;
     };
 
     /// \brief Wrapper class around process object and its information

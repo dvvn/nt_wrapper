@@ -15,6 +15,7 @@
  */
 
 #include "../thread.hpp"
+#include "../sys/version.hpp"
 
 namespace ntw::ob {
 
@@ -90,9 +91,39 @@ namespace ntw::ob {
         return *this;
     }
 
-    NTW_INLINE constexpr thread_access& thread_access::all() noexcept
+    NTW_INLINE thread_access& thread_access::set_access() noexcept
     {
-        _access |= THREAD_ALL_ACCESS;
+        if(ntw::sys::sys_ver_from_peb()->to_ver_enum() >=
+           ntw::sys::ver_enum::windows_vista) {
+            _access |= THREAD_SET_LIMITED_INFORMATION;
+        }
+        else {
+            _access |= THREAD_SET_INFORMATION;
+        }
+        return *this;
+    }
+
+    NTW_INLINE thread_access& thread_access::query_access() noexcept {
+        if(ntw::sys::sys_ver_from_peb()->to_ver_enum() >=
+           ntw::sys::ver_enum::windows_vista) {
+            _access |= THREAD_QUERY_LIMITED_INFORMATION;
+        }
+        else {
+            _access |= THREAD_QUERY_INFORMATION;
+        }
+        return *this;
+    }
+    NTW_INLINE thread_access& thread_access::all() noexcept
+    {
+
+        if(ntw::sys::sys_ver_from_peb()->to_ver_enum() >=
+           ntw::sys::ver_enum::windows_vista) {
+            _access = STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0xfff;
+        }
+        else {
+            _access = STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x3ff;
+        }
+        
         return *this;
     }
 
