@@ -302,7 +302,7 @@ namespace ntw::ob {
     template<class H>
     NTW_INLINE status basic_thread<H>::terminate(status s) const noexcept
     {
-        return NTW_SYSCALL(NtTerminateThread)(this->get(), s);
+        return NTW_SYSCALL(NtTerminateThread)(this->get(), s.get());
     }
 
     template<class H>
