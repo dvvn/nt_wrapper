@@ -16,7 +16,9 @@
 
 #pragma once
 
+#ifndef NTW_INLINE
 #define NTW_INLINE __forceinline
+#endif
 
 #ifndef NTW_SYSCALL
 #define NTW_SYSCALL(fn) fn
